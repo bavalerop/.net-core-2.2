@@ -1,0 +1,13 @@
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\bin\Debug\netcoreapp2.2\API_ENTERPRISE.deps.json
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\bin\Debug\netcoreapp2.2\API_ENTERPRISE.runtimeconfig.json
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\bin\Debug\netcoreapp2.2\API_ENTERPRISE.runtimeconfig.dev.json
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\bin\Debug\netcoreapp2.2\API_ENTERPRISE.dll
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\bin\Debug\netcoreapp2.2\API_ENTERPRISE.pdb
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.csproj.CoreCompileInputs.cache
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.RazorAssemblyInfo.cache
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.RazorAssemblyInfo.cs
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.AssemblyInfoInputs.cache
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.AssemblyInfo.cs
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.RazorTargetAssemblyInfo.cache
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.dll
+D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.pdb
