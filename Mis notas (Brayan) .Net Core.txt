@@ -1,0 +1,585 @@
+********************************Commands Windows Git***********************************
+**************************SOLUCION ERROR ARCHIVOS LARGOS*****************************
+git config --system core.longpaths true
+**************************************************************************************
+************.NET CORE 2.2***************
+*************DEPENDENCIAS****************
+*************NuGET**********************
+Descargar los paquetes
+* Microsoft.AspNetCore.App
+* Microsoft.AspNetCore.Razor.Design
+* Swashbuckle.AspNetCore
+****************************************
+Instalar entity framework
+*****************************************
+************Propiedades******************
+ "launchUrl": "", dejar vacio para que se cargue la pagina inicial del swager sin necesidad de escribir mucho solo localhost/nombreapp/
+*****************************************
+***************appsettingsjson***********
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "Dbcnn": "Server=CLTBVALERO;Database=Enterprise_DES;User ID=sa;Password=12345;MultipleActiveResultSets=true"
+  },
+  "SecretKey": "CltechAPIENTERPRISEWEB"
+}
+***************************************
+**************startup******************
+using API_ENTERPRISE.Data;
+using API_ENTERPRISE.Extensions;
+using API_ENTERPRISE.Repository;
+using API_ENTERPRISE.Repository.Interfaces;
+using API_ENTERPRISE.Services;
+using API_ENTERPRISE.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace API_ENTERPRISE
+{
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            //Inyeccion de repositorys
+            services.AddScoped<ISectionRepository, SectionRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IBranchRepository, BranchRepository>();
+            services.AddScoped<IConfiguracionRepository, ConfiguracionRepository>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
+
+            //Inyeccion de services
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISectionService, SectionService>();
+            services.AddScoped<IBranchService, BranchService>();
+            services.AddScoped<IConfiguracionService, ConfiguracionService>();
+            services.AddScoped<IAuthService, AuthService>();
+            
+            //Agregar conexion al contexto principal
+            services.AddDbContext<TodoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Dbcnn")));
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            //Token
+            var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("SecretKey"));
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services.AddMvc();
+
+            #region Registro the Swagger generator, se define 1 o mas documentos
+            services.AddSwaggerGen(swagger =>
+            {
+                var contact = new Contact() { Name = SwaggerConfiguration.ContactName, Url = SwaggerConfiguration.ContactUrl };
+                swagger.SwaggerDoc(SwaggerConfiguration.DocNameV1, new Info {
+                                        Title = SwaggerConfiguration.DocInfoTitle,
+                                        Version = SwaggerConfiguration.DocInfoVersion,
+                                        Description = SwaggerConfiguration.DocInfoDescription,
+                                        Contact = contact
+                                   });
+                //Configuracion de swagger para solicitar el token
+                swagger.AddSecurityDefinition("Bearer", new ApiKeyScheme {
+                                                In = "header de la peticion",
+                                                Description = "Ingrese en el campo la palabra 'Bearer' seguido de espacio y JWT Token",
+                                                Name = "Authorization",
+                                                Type = "apiKey"
+                                             });
+                swagger.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {{ "Bearer", Enumerable.Empty<string>() },});
+            });
+
+            #endregion
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            #region Se habilita el middleware para usar el swagger-ui
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint(SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.EndpointDescription);
+                c.RoutePrefix = string.Empty;
+            });
+
+            #endregion
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseHsts();
+            }
+            //Uso de JWT
+            app.UseAuthentication();
+            app.UseHttpsRedirection();
+            app.UseMvc();
+        }
+    }
+}
+***********************
+***************************CUERPO DEL PROYECTO*****************
+Controllers-->Controladores del API
+Data---->Se almacena el archivo context (TodoContext.cs)
+Extensions--->Plugins y exensiones (Uso para el SwaggerConfig)
+Models---->Modelos de uso interno no se usan para enviar o recibir normalmente son los que se usan como entidad a una tabla
+Models/RequestModels--->Modelos que sirven para recibir el json de entrada y convertirlo en objeto para su uso.
+Models/ResponsModels--->Modelos que se usan como respuesta estos deberian ser solo para mapear la respuesta como se solicita sin embargo puede que un objeto de este tipo sirva como entidad
+Repository--->Clases de consultas a la BD y cargue de objetos
+Repository/Interfaces--->Interfaces para declarar los metodos de los repository
+Services--->Clases donde se imboca el Dao o repository para mapear u operar en caso de necesitarse (Este objeto sera inyectado en los controller)
+Services/Interfaces -->Interfaces para declarar los metodos de los services
+appsettings.json-->Archivo config declaracion de cadenas de conexion y variables globales del proyecto
+***********************Context*********************************
+using API_ENTERPRISE.Models;
+using API_ENTERPRISE.Models.ResponsModels;
+using Microsoft.EntityFrameworkCore;
+
+namespace API_ENTERPRISE.Data
+{
+    public class TodoContext : DbContext
+    {
+
+        //Crear nuestro dbSet por objeto que use la base de datos
+        public DbSet<ResponsConfig> Configuracion { get; set; }
+        public DbSet<AuthUser> AuthUser { get; set; }
+        public DbSet<Rol> rol { get; set; }
+        public DbSet<UserXrol> userXrol { get; set; }
+        public DbSet<UsuarioDemograficoItem> uDIt { get; set; }
+        public DbSet<ResponsSection> section { get; set; }
+        public DbSet<UserXSection> UsSection { get; set; }
+
+        //Llave compuesta para UsuarioDemograficoItem no lleva anotacion [Key] en el modelo
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UsuarioDemograficoItem>()
+                .HasKey(o => new { o.idDemograficoItem, o.idUser });
+
+            modelBuilder.Entity<UserXSection>()
+                .HasKey(u => new { u.idUser, u.idSection });
+        }
+
+        public DbSet<Demografico> Demogra { get; set; }
+        public DbSet<DemograficoItem> DemoIt { get; set; }
+        public TodoContext(DbContextOptions<TodoContext> options) : base(options)
+        {
+
+        }
+    }
+}
+****************************SwaggerConfiguration.cs*******************************
+
+
+namespace API_ENTERPRISE.Extensions
+{
+    public class SwaggerConfiguration
+    {
+
+        /// <summary>
+        /// <para>Cltech</para>
+        /// </summary>
+        public const string EndpointDescription = "API Enterprise V_1.0";
+
+        /// <summary>
+        /// <para>/swagger/v1/swagger.json</para>
+        /// </summary>
+        public const string EndpointUrl = "swagger/V_1.0/swagger.json";
+
+        /// <summary>
+        /// <para>Brayan Valero</para>
+        /// </summary>
+        public const string ContactName = "BValero";
+
+        /// <summary>
+        /// <para>http://www.cltech.net/</para>
+        /// </summary>
+        public const string ContactUrl = "http://www.cltech.net/";
+
+        /// <summary>
+        /// <para>V_1.0</para>
+        /// </summary>
+        public const string DocNameV1 = "V_1.0";
+
+        /// <summary>
+        /// <para>API Enterprise</para>
+        /// </summary>
+        public const string DocInfoTitle = "API Enterprise";
+
+        /// <summary>
+        /// <para>V_1.0</para>
+        /// </summary>
+        public const string DocInfoVersion = "V_1.0";
+
+        /// <summary>
+        /// <para>API Enterprise - API in ASP.NET Core 2.2</para>
+        /// </summary>
+        public const string DocInfoDescription = "API Enterprise - API in ASP.NET Core 2.2";
+    }
+}
+*********************************Modelo Entity**************************
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace API_ENTERPRISE.Models
+{
+    [Table("Lab62")]
+    public class Demografico
+    {
+        #region Declaracion de variables
+        [Key]
+        [Column("Lab62C1")]
+        public int id { get; set; }
+        [Column("Lab62C2")]
+        public string demografico { get; set; }
+        [Column("Lab62C3")]
+        public string origen { get; set; }
+        [Column("Lab62C4")]
+        public int tipo { get; set; }
+        [Column("Lab07C1")]
+        public int estado { get; set; }
+        #endregion
+    }
+}
+***************************Interfaz de repository ejemplo*****************
+using API_ENTERPRISE.Models;
+using API_ENTERPRISE.Models.ResponsModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace API_ENTERPRISE.Repository.Interfaces
+{
+    public interface IBranchRepository
+    {
+        Task<QueryResult<ResponsBranch>> GetBranchesByID(int id);
+
+        Task<QueryResult<ResponsBranch>> GetBranches();
+    }
+}
+*************************Ejemplo de repository***********************
+using API_ENTERPRISE.Data;
+using API_ENTERPRISE.Models;
+using API_ENTERPRISE.Models.ResponsModels;
+using API_ENTERPRISE.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace API_ENTERPRISE.Repository
+{
+    public class BranchRepository : IBranchRepository
+    {
+	//Se inyecta el contexto con el fin de usar la conexion a la base de datos para consultas con linq
+        private readonly TodoContext _context;
+        private readonly ConfiguracionRepository _objConf;
+
+        public BranchRepository(TodoContext context)
+        {
+            this._context = context;
+            this._objConf = new ConfiguracionRepository(this._context);
+        }
+        public async Task<QueryResult<ResponsBranch>> GetBranchesByID(int id)
+        {
+            var result = new QueryResult<ResponsBranch>();
+
+            try
+            {
+                var TrabajoPorSede = await this._objConf.GetJobBranch();
+
+                if (TrabajoPorSede.Items.ElementAt(0).value == "True")
+                {
+                    var DemoSede = await this._objConf.GetConfig("DemograficoSede");
+
+                    var sed = (from It in this._context.DemoIt
+                               where It.idDemografico == Convert.ToInt16(DemoSede.Items.ElementAt(0).value) && It.id == id
+                               select new ResponsBranch
+                               {
+                                   id = Convert.ToInt16(It.id),
+                                   code = It.codigo,
+                                   abbreviation = "",
+                                   name = It.demograficoItem.Trim(),
+                                   state = It.estado == 1 ? true : false
+                               }
+
+                              );
+                    //Alamacena una lista de sedes en el objeto QueryResult
+                    result.Items = await sed.ToListAsync();
+                    //Se retorna la lista
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            //Se retorna la lista
+            return result;
+        }
+
+        public async Task<QueryResult<ResponsBranch>> GetBranches()
+        {
+            var result = new QueryResult<ResponsBranch>();
+
+            try
+            {
+                var TrabajoPorSede = await this._objConf.GetJobBranch();
+
+                if (TrabajoPorSede.Items.ElementAt(0).value == "True")
+                {
+                    var DemoSede = await this._objConf.GetConfig("DemograficoSede");
+
+                    var sed = (from It in this._context.DemoIt
+                               where It.idDemografico == Convert.ToInt16(DemoSede.Items.ElementAt(0).value)
+                               select new ResponsBranch
+                               {
+                                   id = Convert.ToInt16(It.id),
+                                   code = It.codigo,
+                                   abbreviation = "",
+                                   name = It.demograficoItem.Trim(),
+                                   state = It.estado == 1 ? true : false
+                               }
+
+                              );
+                    //Alamacena una lista de sedes en el objeto QueryResult
+                    result.Items = await sed.ToListAsync();
+                    //Se retorna la lista
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            //Se retorna la lista
+            return result;
+        }
+    }
+}
+*********************************************************Modelo QueryResult.cs**************************
+//Modelo para el retorno general de datos para mapear los Iqueriable a IEnumerable de una consulta a un objeto de respuesta
+//Ya que todas las peticiones se hacen asincronamente estos metodos deben llevar la palabra reservada async
+using System.Collections.Generic;
+
+
+namespace API_ENTERPRISE.Models
+{
+    public class QueryResult<T>
+    {
+        //Obejto para Devolver una Lista de Items de un query de un tipo de objeto X
+        public IEnumerable<T> Items { get; set; }
+    }
+}
+
+*********************************************Interfaz Service*****************************
+using API_ENTERPRISE.Models;
+using API_ENTERPRISE.Models.ResponsModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace API_ENTERPRISE.Services.Interfaces
+{
+    public interface IBranchService
+    {
+        Task<ResponsBranch> GetBranchesByID(int id);
+
+        Task<QueryResult<ResponsBranch>> GetBranches();
+    }
+}
+****************************************Service****************************************
+using API_ENTERPRISE.Models;
+using API_ENTERPRISE.Models.ResponsModels;
+using API_ENTERPRISE.Repository.Interfaces;
+using API_ENTERPRISE.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace API_ENTERPRISE.Services
+{
+    public class BranchService : IBranchService
+    {
+        private readonly IBranchRepository _branch;
+
+        public BranchService(IBranchRepository branch) {
+            this._branch = branch;
+        }
+        public async Task<ResponsBranch> GetBranchesByID(int id)
+        {
+            var obj = await _branch.GetBranchesByID(id);
+            return obj.Items.ElementAt(0);
+            
+        }
+
+        public async Task<QueryResult<ResponsBranch>> GetBranches()
+        {
+            var obj = await _branch.GetBranches();
+            return obj;
+
+        }
+    }
+}
+**********************************Controller***************************************
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using API_ENTERPRISE.Models.ResponsModels;
+using API_ENTERPRISE.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+//Creator: BVALERO
+//Controlador para obtener datos de las sedes de enterprise
+
+namespace API_ENTERPRISE.Controllers
+{
+    [Produces("application/json")]
+    [Route("api/branches")]
+    public class BranchController : Controller
+    {
+
+        private readonly IBranchService _BranchService;
+
+
+        public BranchController(IBranchService BranchService)
+        {
+            this._BranchService = BranchService;
+        }
+
+
+        // // GET /api/branches/
+        /// <summary>
+        /// Obtiene las sedes regitradas
+        /// </summary>
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<ResponsBranch>> GetBranch()
+        {
+            try
+            {
+                var sedes = await _BranchService.GetBranches();
+                return Ok(sedes.Items);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        // // GET /api/branches/{id}
+        /// <summary>
+        /// Obtiene las sedes regitradas
+        /// </summary>
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ResponsBranch>> GetBranchById(int id)
+        {
+            try
+            {
+                var sedes = await _BranchService.GetBranchesByID(id);
+                return Ok(sedes);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+    }
+}
+************************************Uso de JWT Token*******************
+Se configura el archivo Startup
+Se hace el llamado a la secretkey en el config si se tiene globlal
+ //Token
+var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("SecretKey"));
+
+Dentro del metodo ConfigureServices
+Se define esta declaracion
+ services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+Y en el metodo configure se agrega
+ //Uso de JWT
+ app.UseAuthentication();
+Una vez heche esto se configura el controlador para permitir o no el acceso con token
+*********************************ENFOQUES DE .NET CORE CON ENTITY FRAMEWORK PARA LA EXTRACION DE LOS DATOS**************************************
+Database First-->se parte de una base de datos pre-existente con la que queremos trabajar En este caso Entity Framework creará las entidades orientadas a objetos (las clases) de manera automática, y las actualizará en caso de que haya cambios en la base de datos subyacente. 
+Model First---->se refiere a crear tu modelo de datos visualmente, usando el Diseñador de Modelos de Visual Studio.  luego Entity Framework se encarga de generar la base de datos subyacente o modificarla y también las entidades POCO (Plain Old C# Object, o sea, clases normales y corrientes de C#)
+Code First(Usado en este proyecto)---->Code First nos situamos en el otro extremo del espectro: definimos nuestras clases mediante código, y EF se encarga de generar la base de datos y todo lo necesario para encajar las clases en ellas. Se crean las entidades en codigo (Model) y de hay se crea la base y el modelo visual (Sirve tanto para una base exitente como para crearla de 0)
+*****************************************************************************************************************************************************
