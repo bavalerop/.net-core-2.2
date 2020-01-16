@@ -16,6 +16,10 @@ namespace API_ENTERPRISE.Models
         public int id { get; set; }
         [Column("Lab82C02")]
         public string rol { get; set; }
+
+        [Column("Lab82C4")]
+        public int admin { get; set; }
+
         [Column("Lab07C1")]
         public int estado { get; set; }
         #endregion

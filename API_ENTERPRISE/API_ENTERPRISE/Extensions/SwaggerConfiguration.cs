@@ -13,7 +13,7 @@ namespace API_ENTERPRISE.Extensions
         /// <summary>
         /// <para>/swagger/v1/swagger.json</para>
         /// </summary>
-        public const string EndpointUrl = "/swagger/V_1.0/swagger.json";
+        public const string EndpointUrl = "swagger/V_1.0/swagger.json";
 
         /// <summary>
         /// <para>Brayan Valero</para>

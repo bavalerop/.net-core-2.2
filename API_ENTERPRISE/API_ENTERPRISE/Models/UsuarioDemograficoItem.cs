@@ -11,14 +11,12 @@ namespace API_ENTERPRISE.Models
     public class UsuarioDemograficoItem
     {
         #region Declaracion de variables
-        [Key]
-        public int id { get; set; }
         [Column("Lab63C1")]
-        public int idDemograficoItem { get; set; }
+        public Int16 idDemograficoItem { get; set; }
         [Column("Lab04C1")]
         public int idUser { get; set; }
         [Column("Lab07C1")]
-        public int estado { get; set; }
+        public byte estado { get; set; }
         #endregion
     }
 }

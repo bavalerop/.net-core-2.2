@@ -22,7 +22,7 @@ namespace API_ENTERPRISE.Models
         public bool administrator { get; set; }
         [JsonIgnore]
         public string rol { get; set; }
-        //[JsonIgnore]
+        [JsonIgnore]
         public bool acceso { get; set; }
         [JsonIgnore]
         [Column("Lab04C6")]
@@ -33,6 +33,13 @@ namespace API_ENTERPRISE.Models
         [JsonIgnore]
         [Column("Lab07C10")]
         public string valorIV { get; set; }
+        [JsonIgnore]
+        [Column("Lab04C21")]
+        public int estado { get; set; }
+        [JsonIgnore]
+        [Column("Lab04C9")]
+        public string mail { get; set; }
+
         #endregion
     }
 }

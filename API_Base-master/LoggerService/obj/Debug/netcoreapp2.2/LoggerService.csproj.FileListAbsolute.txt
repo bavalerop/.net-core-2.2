@@ -7,3 +7,12 @@ C:\Users\luhero04\Documents\Projects\BASE\LoggerService\obj\Debug\netcoreapp2.2\
 C:\Users\luhero04\Documents\Projects\BASE\LoggerService\obj\Debug\netcoreapp2.2\LoggerService.AssemblyInfo.cs
 C:\Users\luhero04\Documents\Projects\BASE\LoggerService\obj\Debug\netcoreapp2.2\LoggerService.dll
 C:\Users\luhero04\Documents\Projects\BASE\LoggerService\obj\Debug\netcoreapp2.2\LoggerService.pdb
+D:\Escritorio\PRUEBAS\API_Base-master\LoggerService\bin\Debug\netcoreapp2.2\LoggerService.deps.json
+D:\Escritorio\PRUEBAS\API_Base-master\LoggerService\bin\Debug\netcoreapp2.2\LoggerService.dll
+D:\Escritorio\PRUEBAS\API_Base-master\LoggerService\bin\Debug\netcoreapp2.2\LoggerService.pdb
+D:\Escritorio\PRUEBAS\API_Base-master\LoggerService\obj\Debug\netcoreapp2.2\LoggerService.csprojAssemblyReference.cache
+D:\Escritorio\PRUEBAS\API_Base-master\LoggerService\obj\Debug\netcoreapp2.2\LoggerService.csproj.CoreCompileInputs.cache
+D:\Escritorio\PRUEBAS\API_Base-master\LoggerService\obj\Debug\netcoreapp2.2\LoggerService.AssemblyInfoInputs.cache
+D:\Escritorio\PRUEBAS\API_Base-master\LoggerService\obj\Debug\netcoreapp2.2\LoggerService.AssemblyInfo.cs
+D:\Escritorio\PRUEBAS\API_Base-master\LoggerService\obj\Debug\netcoreapp2.2\LoggerService.dll
+D:\Escritorio\PRUEBAS\API_Base-master\LoggerService\obj\Debug\netcoreapp2.2\LoggerService.pdb

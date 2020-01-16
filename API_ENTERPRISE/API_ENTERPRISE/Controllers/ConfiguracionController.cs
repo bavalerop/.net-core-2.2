@@ -1,30 +1,30 @@
-﻿using System.Net;
-using System.Threading.Tasks;
-using API_ENTERPRISE.Models;
-using API_ENTERPRISE.Repository.Interfaces;
+﻿using System.Threading.Tasks;
+using API_ENTERPRISE.Models.ResponsModels;
+using API_ENTERPRISE.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 //Creator: BVALERO
 //Controlador para obtener datos de configuracion de enterprise
 
 namespace API_ENTERPRISE.Controllers
 {
+    [Produces("application/json")]
     [Route("api/config/")]
 
     public class ConfiguracionController : Controller
     {
-        private readonly IConfiguracionRepository ConfigRepository;
+        private readonly IConfiguracionService _ConfigService;
 
 
 
         ///<Summary>
         /// Constructor
         ///</Summary>
-        public ConfiguracionController(IConfiguracionRepository confi)
+        public ConfiguracionController(IConfiguracionService ConfiService)
         {
-            this.ConfigRepository = confi;
+            this._ConfigService = ConfiService;
         }
 
         // GET: api/config/
@@ -38,13 +38,13 @@ namespace API_ENTERPRISE.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<Config>> GetConfiguracionSede()
+        public async Task<ActionResult<ResponsConfig>> GetConfiguracionSede()
         {
             try
             {
-                var Config = await ConfigRepository.GetJobBranch();
+                var Config = await _ConfigService.GetJobBranch();
                 return Ok(Config.Items);
             }
             catch (System.Exception ex)
@@ -64,13 +64,13 @@ namespace API_ENTERPRISE.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-
+        [Authorize]
         [HttpGet("{key}")]
-        public async Task<ActionResult<Config>> GetConfiguracion(string key)
+        public async Task<ActionResult<ResponsConfig>> GetConfiguracion(string key)
         {
             try
             {
-                var Config = await ConfigRepository.GetConfig(key);
+                var Config = await _ConfigService.GetConfig(key);
                 return Ok(Config.Items);
             }
             catch (System.Exception ex)
