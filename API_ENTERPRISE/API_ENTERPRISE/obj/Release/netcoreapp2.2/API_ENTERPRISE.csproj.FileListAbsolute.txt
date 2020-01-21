@@ -12,3 +12,17 @@ D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\AP
 D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.dll
 D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.pdb
 D:\Escritorio\PRUEBAS\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.csprojAssemblyReference.cache
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\bin\Release\netcoreapp2.2\API_ENTERPRISE.deps.json
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\bin\Release\netcoreapp2.2\API_ENTERPRISE.runtimeconfig.json
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\bin\Release\netcoreapp2.2\API_ENTERPRISE.runtimeconfig.dev.json
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\bin\Release\netcoreapp2.2\API_ENTERPRISE.dll
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\bin\Release\netcoreapp2.2\API_ENTERPRISE.pdb
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.csprojAssemblyReference.cache
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.csproj.CoreCompileInputs.cache
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.RazorAssemblyInfo.cache
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.RazorAssemblyInfo.cs
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.AssemblyInfoInputs.cache
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.AssemblyInfo.cs
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.RazorTargetAssemblyInfo.cache
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.dll
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Release\netcoreapp2.2\API_ENTERPRISE.pdb

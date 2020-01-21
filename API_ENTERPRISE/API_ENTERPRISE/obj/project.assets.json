@@ -12198,11 +12198,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Escritorio\\PRUEBAS\\API_ENTERPRISE\\API_ENTERPRISE\\API_ENTERPRISE.csproj",
+      "projectUniqueName": "D:\\Escritorio\\pru\\.net-core-2.2\\API_ENTERPRISE\\API_ENTERPRISE\\API_ENTERPRISE.csproj",
       "projectName": "API_ENTERPRISE",
-      "projectPath": "D:\\Escritorio\\PRUEBAS\\API_ENTERPRISE\\API_ENTERPRISE\\API_ENTERPRISE.csproj",
+      "projectPath": "D:\\Escritorio\\pru\\.net-core-2.2\\API_ENTERPRISE\\API_ENTERPRISE\\API_ENTERPRISE.csproj",
       "packagesPath": "C:\\Users\\bvalero\\.nuget\\packages\\",
-      "outputPath": "D:\\Escritorio\\PRUEBAS\\API_ENTERPRISE\\API_ENTERPRISE\\obj\\",
+      "outputPath": "D:\\Escritorio\\pru\\.net-core-2.2\\API_ENTERPRISE\\API_ENTERPRISE\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

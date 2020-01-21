@@ -202,7 +202,8 @@ namespace API_ENTERPRISE.Repository
                                     join c in this._context.DemoIt on b.idDemograficoItem equals c.id
                                     join d in this._context.UsSection on a.id equals d.idUser
                                     join e in this._context.section on d.idSection equals e.id
-                                    where c.idDemografico == Convert.ToInt16(DemoSede.Items.ElementAt(0).value) && c.id == request.idbranch && request.areas.Contains(e.id)
+                                    where c.idDemografico == Convert.ToInt16(DemoSede.Items.ElementAt(0).value) && c.id == request.idbranch && request.areas.Contains(e.id) &&
+                                    (from j in this._context.UsSection where j.idUser == a.id && request.areas.Contains(j.idSection) select j).Count() == request.areas.Count()
                                     select new ResponsUserByBraSec
                                     {
                                         id = a.id,
