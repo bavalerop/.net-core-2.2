@@ -69,6 +69,7 @@ namespace API_ENTERPRISE
                 };
             });
 
+            services.AddCors();
             services.AddMvc();
 
             #region Registro the Swagger generator, se define 1 o mas documentos
@@ -115,6 +116,12 @@ namespace API_ENTERPRISE
             {
                 app.UseHsts();
             }
+            //Uso de Cors
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
             //Uso de JWT
             app.UseAuthentication();
             app.UseHttpsRedirection();

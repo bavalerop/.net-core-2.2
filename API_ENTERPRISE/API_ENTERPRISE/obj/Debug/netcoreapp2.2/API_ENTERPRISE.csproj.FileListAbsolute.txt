@@ -25,3 +25,4 @@ D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcorea
 D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.RazorTargetAssemblyInfo.cache
 D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.dll
 D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.pdb
+D:\Escritorio\pru\.net-core-2.2\API_ENTERPRISE\API_ENTERPRISE\obj\Debug\netcoreapp2.2\API_ENTERPRISE.csprojAssemblyReference.cache
